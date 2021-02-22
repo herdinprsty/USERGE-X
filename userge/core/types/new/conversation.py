@@ -28,7 +28,8 @@ _LOG = logging.getLogger(__name__)
 _LOG_STR = "<<<!  :::::  %s  :::::  !>>>"
 
 _CL_TYPE = Union['_client.Userge', '_client.UsergeBot']
-_CONV_DICT: Dict[Tuple[int, _CL_TYPE], Union[asyncio.Queue, Tuple[int, asyncio.Queue]]] = {}
+_CONV_DICT: Dict[Tuple[int, _CL_TYPE],
+                 Union[asyncio.Queue, Tuple[int, asyncio.Queue]]] = {}
 
 
 class _MsgLimitReached(Exception):
@@ -37,6 +38,7 @@ class _MsgLimitReached(Exception):
 
 class Conversation:
     """ Conversation class for userge """
+
     def __init__(self,
                  client: _CL_TYPE,
                  chat: Union[str, int],
@@ -209,11 +211,13 @@ class Conversation:
         del _CONV_DICT[pack]
         error = ''
         if isinstance(exc_val, asyncio.exceptions.TimeoutError):
-            error = (f"ended conversation {self._client} with {self._chat_id}, "
-                     "timeout reached!")
+            error = (
+                f"ended conversation {self._client} with {self._chat_id}, "
+                "timeout reached!")
         if isinstance(exc_val, _MsgLimitReached):
-            error = (f"ended conversation {self._client} with {self._chat_id}, "
-                     "message limit reached!")
+            error = (
+                f"ended conversation {self._client} with {self._chat_id}, "
+                "message limit reached!")
         if error:
             _LOG.error(_LOG_STR, error)
             raise StopConversation(error)

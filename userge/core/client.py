@@ -74,7 +74,9 @@ class _AbstractUserge(Methods, RawClient):
             # pylint: disable=protected-access
             if asyncio.iscoroutinefunction(plg._init):
                 _INIT_TASKS.append(self.loop.create_task(plg._init()))
-        _LOG.debug(_LOG_STR, f"Imported {_IMPORTED[-1].__name__} Plugin Successfully")
+        _LOG.debug(
+            _LOG_STR,
+            f"Imported {_IMPORTED[-1].__name__} Plugin Successfully")
 
     async def _load_plugins(self) -> None:
         _IMPORTED.clear()
@@ -108,6 +110,7 @@ class _AbstractUserge(Methods, RawClient):
 
 class UsergeBot(_AbstractUserge):
     """ USERGE-X Bot """
+
     def __init__(self, **kwargs) -> None:
         _LOG.info(_LOG_STR, "Setting X-BOT Configs")
         super().__init__(session_name=":memory:", **kwargs)
@@ -183,19 +186,26 @@ class Userge(_AbstractUserge):
                     _close_db()
                     pool._stop()  # pylint: disable=protected-access
             # pylint: disable=expression-not-assigned
-            [t.cancel() for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+            [t.cancel() for t in asyncio.all_tasks()
+             if t is not asyncio.current_task()]
             await self.loop.shutdown_asyncgens()
             self.loop.stop()
             _LOG.info(_LOG_STR, "Loop Stopped !")
 
         async def _shutdown(_sig: signal.Signals) -> None:
             global _SEND_SIGNAL  # pylint: disable=global-statement
-            _LOG.info(_LOG_STR, f"Received Stop Signal [{_sig.name}], Exiting USERGE-X ...")
+            _LOG.info(
+                _LOG_STR,
+                f"Received Stop Signal [{_sig.name}], Exiting USERGE-X ...")
             await _finalize()
             if _sig == _sig.SIGUSR1:
                 _SEND_SIGNAL = True
 
-        for sig in (signal.SIGHUP, signal.SIGTERM, signal.SIGINT, signal.SIGUSR1):
+        for sig in (
+                signal.SIGHUP,
+                signal.SIGTERM,
+                signal.SIGINT,
+                signal.SIGUSR1):
             self.loop.add_signal_handler(
                 sig, lambda _sig=sig: self.loop.create_task(_shutdown(_sig)))
         self.loop.run_until_complete(self.start())

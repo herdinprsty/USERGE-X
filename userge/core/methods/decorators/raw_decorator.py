@@ -230,8 +230,10 @@ class RawDecorator(RawClient):
         """ abstract on filter method """
 
     def _build_decorator(self,
-                         flt: Union['types.raw.Command', 'types.raw.Filter'],
-                         **kwargs: Union[str, bool]) -> 'RawDecorator._PYRORETTYPE':
+                         flt: Union['types.raw.Command',
+                                    'types.raw.Filter'],
+                         **kwargs: Union[str,
+                                         bool]) -> 'RawDecorator._PYRORETTYPE':
         def decorator(func: _PYROFUNC) -> _PYROFUNC:
             async def template(r_c: Union['_client.Userge', '_client.UsergeBot'],
                                r_m: RawMessage) -> None:
@@ -250,7 +252,10 @@ class RawDecorator(RawClient):
                         await _raise("`chat admin required`")
                     return
                 if r_m.chat and flt.check_perm:
-                    if not (r_m.chat.type in ("private", "bot") and flt.check_pin_perm):
+                    if not (
+                        r_m.chat.type in (
+                            "private",
+                            "bot") and flt.check_pin_perm):
                         is_admin = await _is_admin(r_c, r_m)
                         c_m = _get_chat_member(r_c, r_m)
                         if not c_m:
@@ -293,8 +298,8 @@ class RawDecorator(RawClient):
                                     await _raise("`required permisson [pin_messages]`")
                                 return
                 if RawClient.DUAL_MODE:
-                    if (flt.check_client
-                            or (r_m.from_user and r_m.from_user.id in Config.SUDO_USERS)):
+                    if (flt.check_client or (
+                            r_m.from_user and r_m.from_user.id in Config.SUDO_USERS)):
                         cond = True
                         async with await _get_lock(str(flt)):
                             if flt.only_admins:
@@ -326,7 +331,9 @@ class RawDecorator(RawClient):
                     await _raise(f"`{f_e}`\n__see logs for more info__")
             flt.update(func, template)
             self.manager.get_plugin(func.__module__).add(flt)
-            _LOG.debug(_LOG_STR, f"Imported => [ async def {func.__name__}(message) ] "
-                       f"from {func.__module__} {flt}")
+            _LOG.debug(
+                _LOG_STR,
+                f"Imported => [ async def {func.__name__}(message) ] "
+                f"from {func.__module__} {flt}")
             return func
         return decorator

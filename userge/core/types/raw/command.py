@@ -23,6 +23,7 @@ from ... import client as _client  # pylint: disable=unused-import
 
 class Command(Filter):
     """ command class """
+
     def __init__(self, about: str, trigger: str, pattern: str,
                  **kwargs: Union['_client.Userge', int, str, bool]) -> None:
         self.about = about
@@ -71,13 +72,20 @@ class Command(Filter):
                          and (cname.lstrip(trigger) in Config.ALLOWED_COMMANDS)))
                 and m.text.startswith(Config.SUDO_TRIGGER))
             filters_ = filters_ & (outgoing_flt | incoming_flt)
-        return cls(_format_about(about), trigger, pattern, filters=filters_, name=cname, **kwargs)
+        return cls(
+            _format_about(about),
+            trigger,
+            pattern,
+            filters=filters_,
+            name=cname,
+            **kwargs)
 
     def __repr__(self) -> str:
         return f"<command {self.name}>"
 
 
-def _format_about(about: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]]]) -> str:
+def _format_about(
+        about: Union[str, Dict[str, Union[str, List[str], Dict[str, str]]]]) -> str:
     if not isinstance(about, dict):
         return about
     tmp_chelp = ''

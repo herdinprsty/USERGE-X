@@ -90,6 +90,7 @@ asyncio.get_event_loop().run_until_complete(_main())
 
 class Filter:
     """ filter class """
+
     def __init__(self,
                  filters: RawFilter,
                  client: '_client.Userge',
@@ -108,7 +109,8 @@ class Filter:
                  check_invite_perm: bool,
                  check_pin_perm: bool,
                  name: str = '') -> None:
-        self.filters = rawfilters.create(lambda _, __, ___: self.is_enabled) & filters
+        self.filters = rawfilters.create(
+            lambda _, __, ___: self.is_enabled) & filters
         self.name = name
         self.scope = scope
         self.only_admins = only_admins
@@ -133,9 +135,14 @@ class Filter:
         self._handler: Handler
 
     @classmethod
-    def parse(cls, **kwargs: Union[RawFilter, '_client.Userge', int, bool]) -> 'Filter':
+    def parse(cls,
+              **kwargs: Union[RawFilter,
+                              '_client.Userge',
+                              int,
+                              bool]) -> 'Filter':
         """ parse filter """
-        return cls(**Filter._parse(**kwargs))  # pylint: disable=protected-access
+        return cls(**Filter._parse(**kwargs)
+                   )  # pylint: disable=protected-access
 
     @staticmethod
     def _parse(allow_private: bool,
@@ -184,7 +191,8 @@ class Filter:
         if loaded:
             await self.load()
 
-    def update(self, func: Callable[[Any], Any], template: Callable[[Any], Any]) -> None:
+    def update(self, func: Callable[[Any], Any],
+               template: Callable[[Any], Any]) -> None:
         """ update filter """
         if not self.name:
             self.name = f"{func.__module__.split('.')[-1]}.{func.__name__}"

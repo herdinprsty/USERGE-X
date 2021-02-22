@@ -31,7 +31,11 @@ def _gen_string(name: str) -> str:
 
 class ChannelLogger:
     """ Channel logger for Userge """
-    def __init__(self, client: Union['_client.Userge', '_client.UsergeBot'], name: str) -> None:
+
+    def __init__(self,
+                 client: Union['_client.Userge',
+                               '_client.UsergeBot'],
+                 name: str) -> None:
         self._id = Config.LOG_CHANNEL_ID
         self._client = client
         self._string = _gen_string(name)
@@ -133,7 +137,9 @@ class ChannelLogger:
         caption = caption or ''
         file_id = None
         if message and message.caption:
-            caption = (caption + message.caption.html) if caption != message.caption.html else caption
+            caption = (
+                caption +
+                message.caption.html) if caption != message.caption.html else caption
         if message:
             file_id = get_file_id(message)
         if message and message.media and file_id:
@@ -154,7 +160,7 @@ class ChannelLogger:
                              user_id: int,
                              reply_to_message_id: int,
                              del_in: int = 0,
-                             allow_random:bool=True) -> None:
+                             allow_random: bool = True) -> None:
         """\nforward stored message from log channel.
 
         Parameters:

@@ -32,9 +32,15 @@ _LOG_STR = "<<<!  :::::  %s  :::::  !>>>"
 
 class Message(RawMessage):
     """ Modded Message Class For Userge """
+
     def __init__(self,
-                 client: Union['_client.Userge', '_client.UsergeBot'],
-                 mvars: Dict[str, object], module: str, **kwargs: Union[str, bool]) -> None:
+                 client: Union['_client.Userge',
+                               '_client.UsergeBot'],
+                 mvars: Dict[str,
+                             object],
+                 module: str,
+                 **kwargs: Union[str,
+                                 bool]) -> None:
         self._filtered = False
         self._filtered_input_str = ''
         self._flags: Dict[str, str] = {}
@@ -53,7 +59,8 @@ class Message(RawMessage):
             if key_ in mvars:
                 del mvars[key_]
         if mvars['reply_to_message']:
-            mvars['reply_to_message'] = cls.parse(client, mvars['reply_to_message'], **kwargs)
+            mvars['reply_to_message'] = cls.parse(
+                client, mvars['reply_to_message'], **kwargs)
         return cls(client, mvars, **kwargs)
 
     @property
@@ -93,7 +100,8 @@ class Message(RawMessage):
         """ Returns the input string  or replied msg text without command """
         input_ = self.input_str
         if not input_ and self.reply_to_message:
-            input_ = (self.reply_to_message.text or self.reply_to_message.caption or '').strip()
+            input_ = (
+                self.reply_to_message.text or self.reply_to_message.caption or '').strip()
         return input_
 
     @property
@@ -117,7 +125,8 @@ class Message(RawMessage):
         return self._process_canceled
 
     @property
-    def extract_user_and_text(self) -> Tuple[Optional[Union[str, int]], Optional[str]]:
+    def extract_user_and_text(
+            self) -> Tuple[Optional[Union[str, int]], Optional[str]]:
         """ Extracts User and Text
         [NOTE]: This method checks for reply first.
         On Success:
@@ -141,7 +150,8 @@ class Message(RawMessage):
             if user.isdigit():
                 user_e = int(user)
             elif self.entities:
-                # Extracting text mention entity and skipping if it's @ mention.
+                # Extracting text mention entity and skipping if it's @
+                # mention.
                 for mention in self.entities:
                     # Catch first text mention
                     if mention.type == "text_mention":

@@ -34,7 +34,10 @@ class RawClient(Client):
     REQ_LOGS: Dict[int, 'ChatReq'] = {}
     REQ_LOCK = asyncio.Lock()
 
-    def __init__(self, bot: Optional['userge.core.client.UsergeBot'] = None, **kwargs) -> None:
+    def __init__(
+            self,
+            bot: Optional['userge.core.client.UsergeBot'] = None,
+            **kwargs) -> None:
         self._bot = bot
         super().__init__(**kwargs)
         self._channel = userge.core.types.new.ChannelLogger(self, "CORE")
@@ -57,7 +60,10 @@ class RawClient(Client):
                                  types.InputMediaUploadedPhoto)):
                 tmp = None
             if tmp:
-                if isinstance(tmp, (types.InputPeerChannel, types.InputPeerChannelFromMessage)):
+                if isinstance(
+                    tmp,
+                    (types.InputPeerChannel,
+                     types.InputPeerChannelFromMessage)):
                     key = int(tmp.channel_id)
                 elif isinstance(tmp, types.InputPeerChat):
                     key = int(tmp.chat_id)
